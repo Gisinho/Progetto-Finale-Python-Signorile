@@ -67,19 +67,19 @@ def crea_colonne(df):
 
 def relazioni_churn(df):
     print("Relazione tra variabili e Churn:")
-    print(df.groupby('Churn')[['Età', 'Durata_Abbonamento', 'Tariffa_Mensile']].mean())
+    print(df.groupby('Churn')[['ID_Cliente']].count())
 
 def relazioni_eta(df):
-    print("Relazione tra variabili e Churn:")
-    print(df.groupby('Età')[['Durata_Abbonamento', 'Tariffa_Mensile']].mean())  
+    print("Relazione tra variabili e Età:")
+    print(df.groupby('Età')[['ID_Cliente']].count())  
 
 def relazioni_abbonamento(df):
-    print("Relazione tra variabili e Churn:")
-    print(df.groupby('Durata_Abbonamento')[['Età', 'Tariffa_Mensile']].mean()) 
+    print("Relazione tra variabili e Abbonamento:")
+    print(df.groupby('Durata_Abbonamento')[['ID_Cliente']].count()) 
 
 def relazioni_tariffa(df):
-    print("Relazione tra variabili e Churn:")
-    print(df.groupby('Tariffa_Mensile')[['Età','Durata_Abbonamento']].mean())      
+    print("Relazione tra variabili e Tariffe:")
+    print(df.groupby('Tariffa_Mensile')[['ID_Cliente']].count())      
     
 
 def identifica_correlazioni(df):
@@ -92,15 +92,3 @@ def converti_churn(df):
     #La lambda function restituisce 1 se x è uguale a 'Yes', altrimenti restituisce 0
     df['Churn'] = df['Churn'].apply(lambda x: 1 if x == 'Yes' else 0) 
     print("Churn convertita in numerico.")
-
-
-
-
-# Percorso file
-file_path = 'Progetto/clienti.csv'
-
-#Prove
-df = carica_dati(file_path)
-
-relazioni_eta(df)
-print(df)

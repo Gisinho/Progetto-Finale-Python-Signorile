@@ -33,15 +33,21 @@ def carica_dati(file_path):
     df = pd.read_csv(file_path)
     return df
 
-def esplora_dati(df):
+def info(df):
     print("\nInfo sul dataset:")
     print(df.info())
+
+def descrizione(df):
     print("\nDescrizione:")
     print(df.describe())
-    print("\nDistribuzione dei valori nella colonna Churn:")
-    print(df['Churn'].value_counts())
-    print("\nValori mancanti per colonna:")
-    print(df.isnull())
+    
+def valori_mancanti(df):    
+    print("\nValori per colonna:")
+    print(df.value_counts())
+    # valori mancanti (media delle tariffe mensili)
+    df['Tariffa_Mensile'].fillna(df['Tariffa_Mensile'].mean(), inplace=True)
+    print("Valori mancanti gestiti con inplace.")
+
 
 def pulisci_dati(df):
     # Gestire i valori mancanti
@@ -59,6 +65,34 @@ def crea_colonne(df):
     df['Costo_per_GB'] = df['Tariffa_Mensile'] / df['Dati_Consumati']
     return df
 
+def relazioni_churn(df):
+    print("Relazione tra variabili e Churn:")
+    print(df.groupby('Churn')[['Età', 'Durata_Abbonamento', 'Tariffa_Mensile']].mean())
+
+def relazioni_eta(df):
+    print("Relazione tra variabili e Churn:")
+    print(df.groupby('Età')[['Durata_Abbonamento', 'Tariffa_Mensile']].mean())  
+
+def relazioni_abbonamento(df):
+    print("Relazione tra variabili e Churn:")
+    print(df.groupby('Durata_Abbonamento')[['Età', 'Tariffa_Mensile']].mean()) 
+
+def relazioni_tariffa(df):
+    print("Relazione tra variabili e Churn:")
+    print(df.groupby('Tariffa_Mensile')[['Età','Durata_Abbonamento']].mean())      
+    
+
+def identifica_correlazioni(df):
+    print("\nCorrelazioni tra le variabili:")
+    correlazione = df.corr()
+    print(correlazione)
+
+def converti_churn(df):
+    #funzione che prende un valore(x elemntocolonna churn)
+    #La lambda function restituisce 1 se x è uguale a 'Yes', altrimenti restituisce 0
+    df['Churn'] = df['Churn'].apply(lambda x: 1 if x == 'Yes' else 0) 
+    print("Churn convertita in numerico.")
+
 
 
 
@@ -67,9 +101,6 @@ file_path = 'Progetto/clienti.csv'
 
 #Prove
 df = carica_dati(file_path)
-print(df)
-df = pulisci_dati(df)
-df = correggi_anomalie(df)
-print(df)
-df = crea_colonne(df)
+
+relazioni_eta(df)
 print(df)

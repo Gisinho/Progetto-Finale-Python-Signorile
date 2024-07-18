@@ -19,6 +19,7 @@ def menu():
         print("10. Analizza relazioni con Tariffa Mensile")
         print("11. Identifica correlazioni")
         print("12. Converti Churn in formato numerico")
+        print("13. Normalizza colonne numeriche preparandole alla modellazione")
         print("0. Esci")
 
         try:
@@ -51,6 +52,9 @@ def menu():
                 pf.identifica_correlazioni(df)
             elif scelta == 12:
                 pf.converti_churn(df)
+            elif scelta == 13:
+                pf.normalizza_colonne_numeriche(df)
+                print("Hai normalizzato le colonne")
             elif scelta == 0:
                 print("Arrivederci")
                 break

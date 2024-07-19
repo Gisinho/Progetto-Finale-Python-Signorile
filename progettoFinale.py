@@ -42,48 +42,50 @@ def info(df):
 def descrizione(df):
     print("\nDescrizione:")
     print(df.describe())
-#funzione per gestire i valori mancanti    
-def valori_mancanti(df):    
+#funzione per la distribuzione dei valori  
+def distribuzione_val(df):    
     print("\nValori per colonna:")
     print(df.value_counts())
-    # valori mancanti (media delle tariffe mensili)
-    df['Tariffa_Mensile'].fillna(df['Tariffa_Mensile'].mean(), inplace=True)
-    print("Valori mancanti gestiti con inplace.")
+#funzione per gestire i valori mancanti 
+def valori_mancanti(df):
+    print("\nValori mancanti")
+    print(df.isnull())
 
 # Funzione per pulire i dati rimuovendo righe con valori mancanti
 def pulisci_dati(df):
     # Gestire i valori mancanti
     df = df.dropna()  # Rimuove le righe con valori mancanti
+    print(df)
     return df
 
 def correggi_anomalie(df):
-    # Correggere anomalie nei dati(valori negativi e 0)
+    # rimuove anomalie(valori negativi e 0) 
     df = df[df['Età'] >= 0]
     df = df[df['Tariffa_Mensile'] > 0]
+    print(df)
     return df
 
 # Analisi Esplorativa dei Dati (EDA)
 def crea_colonne(df):
     df['Costo_per_GB'] = df['Tariffa_Mensile'] / df['Dati_Consumati']
+    print(df)
     return df
-
 def relazioni_churn(df):
     print("Relazione tra variabili e Churn:")
     print(df.groupby('Churn')[['ID_Cliente']].count())
-
-# Funzione per analizzare la relazione tra variabili e 'Età'
+# Funzione per visualizzare l'èta media clienti
 def relazioni_eta(df):
-    print("Relazione tra variabili e Età:")
-    print(df.groupby('Età')[['ID_Cliente']].count())  
+    print("\nEtà media clienti:")
+    print(df.groupby('ID_Cliente')[['Età']].sum().mean())  
 
-def relazioni_abbonamento(df):
-    print("Relazione tra variabili e Abbonamento:")
-    print(df.groupby('Durata_Abbonamento')[['ID_Cliente']].count()) 
+def relazioni_abbonamento(df):# Funzione per visualizzare l'abbonamento piu lungo
+    print("\nDurata abbonamento più lungo:")
+    print(df.groupby('ID_Cliente')[['Durata_Abbonamento']].sum().max()) 
 
-# Funzione per analizzare la relazione tra variabili e 'Tariffa_Mensile'
+# Funzione per analizzare la tariffa mensile piu alta
 def relazioni_tariffa(df):
-    print("Relazione tra variabili e Tariffe:")
-    print(df.groupby('Tariffa_Mensile')[['ID_Cliente']].count())      
+    print("\nRelazione tra variabili e Tariffe:")
+    print(df.groupby('ID_Cliente')[['Tariffa_Mensile']].sum().max())      
     
 #Funzione per identificare correlazioni tra le variabili numeriche nel DataFrame
 def identifica_correlazioni(df):
@@ -102,11 +104,14 @@ def converti_churn(df):
 
 def normalizza_colonne_numeriche(df):
     #ottengo una lista delle colonne numeriche nel DataFrame df
-    numeriche = df.select_dtypes(include=[np.number]).columns.tolist()
-    for col in numeriche: #itero su ogni colonna identificata
+    colonne = df.select_dtypes(include=[np.number]).columns.tolist()
+    for colonna in colonne: #itero su ogni colonna identificata
         # Calcola media e deviazione standard della colonna
-        mean = df[col].mean() #calcolo media
-        std = df[col].std() #calcolo deviazione standard
+        mean = df[colonna].mean() #calcolo media
+        std = df[colonna].std() #calcolo deviazione standard
         # Applica la normalizzazione Z-score: (x - mean) / std
-        df[col] = (df[col] - mean) / std
+        df[colonna] = (df[colonna] - mean) / std
+    print("\nDataframe con colonne normalizzate: \n",df[colonne],"\n")
     return df
+
+
